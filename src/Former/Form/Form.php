@@ -127,7 +127,7 @@ class Form extends FormerObject
     $action     = Arrays::get($parameters, 0);
     $method     = Arrays::get($parameters, 1, 'POST');
     $attributes = Arrays::get($parameters, 2, array());
-    $secure     = Arrays::get($parameters, 3, false);
+    $secure     = Arrays::get($parameters, 3, null);
 
     // Fetch errors if asked for
     if ($this->former->getOption('fetch_errors')) {
@@ -191,7 +191,7 @@ class Form extends FormerObject
    */
   public function action($action)
   {
-    $this->action = $action ? $this->url->to($action, array(), $this->secure) : null;
+    $this->action = $action ? $this->url->to($action, $this->secure) : null;
 
     return $this;
   }
