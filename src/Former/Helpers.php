@@ -74,7 +74,7 @@ class Helpers
     $translateFrom = static::$former->getOption('translate_from').'.'.$key;
 
     // Search for the key itself
-    if (static::$translator->has($key)) {
+    if (strstr($key, '.') !== false && static::$translator->has($key)) {
       $translation = static::$translator->get($key);
     } elseif (static::$translator->has($translateFrom)) {
       $translation  = static::$translator->get($translateFrom);
