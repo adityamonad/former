@@ -122,7 +122,7 @@ Former::select('clients')->options($clients, 2)
 What you actually get is the following output (with Bootstrap) :
 
 ```html
-<div class="control-group warning">
+<div class="form-group warning">
   <label for="clients" class="control-label">Clients</label>
   <div class="controls">
     <select id="clients" name="clients">
@@ -243,7 +243,7 @@ Former::select('clients')->fromQuery(Client::all());
 Is the same as doing this but you know, in less painful and DRYer. This will use each Client's default key, and output the Client's name as the option's label.
 
 ```html
-<div class="control-group">
+<div class="form-group">
   <label for="foo" class="control-label">Foo</label>
   <div class="controls">
     <select id="foo" name="foo">
@@ -468,7 +468,7 @@ All form classes encounter a problem at one point : what kind of data takes prec
 
 ```php
 // Laravel
-<div class="control-group">
+<div class="form-group">
   {{ Form::label('input01', __('validation.attributes.input01'), array('class' => 'control-label') )}}
   <div class="controls">
     <div class="input-prepend input-append">

@@ -252,7 +252,7 @@ class SelectTest extends FormerTests
     $html[] = $this->former->select('frmVehicleMake')->label('Make')->options($this->options)->wrapAndRender();
 
     $results = implode(' ', $html);
-    $this->assertContains('control-group', $results);
+    $this->assertContains('form-group', $results);
   }
 
   public function testCanPopulateMultipleSelects()

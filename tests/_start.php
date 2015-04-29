@@ -80,7 +80,7 @@ abstract class FormerTests extends PHPUnit_Framework_TestCase
     return array(
       'tag' => 'div',
       'attributes' => array(
-        'class' => 'control-group',
+        'class' => 'form-group',
       ),
       'child' => array(
         'tag' => 'div',
@@ -221,7 +221,7 @@ abstract class FormerTests extends PHPUnit_Framework_TestCase
    */
   protected function controlGroup($input = '<input type="text" name="foo" id="foo">', $label = '<label for="foo" class="control-label">Foo</label>')
   {
-    return '<div class="control-group">'.$label.'<div class="controls">'.$input.'</div></div>';
+    return '<div class="form-group">'.$label.'<div class="controls">'.$input.'</div></div>';
   }
 
   /**
@@ -234,7 +234,7 @@ abstract class FormerTests extends PHPUnit_Framework_TestCase
    */
   protected function controlGroupRequired($input, $label = '<label for="foo" class="control-label">Foo</label>')
   {
-    return '<div class="control-group required">'.$label.'<div class="controls">'.$input.'</div></div>';
+    return '<div class="form-group required">'.$label.'<div class="controls">'.$input.'</div></div>';
   }
 
   /**

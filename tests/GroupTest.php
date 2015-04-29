@@ -35,7 +35,7 @@ class GroupTest extends FormerTests
     if($blockHelp)  $blockHelp  = '<p class="help-block">' .ucfirst($blockHelp). '</p>';
 
     return
-    '<div class="control-group' .$state. '">' .
+    '<div class="form-group' .$state. '">' .
       '<label for="foo" class="control-label">Foo</label>' .
       '<div class="controls">' .
         '<input id="foo" type="text" name="foo">' .
@@ -55,7 +55,7 @@ class GroupTest extends FormerTests
     if($append) $class .= " input-append";
 
     return
-    '<div class="control-group">' .
+    '<div class="form-group">' .
       '<label for="foo" class="control-label">Foo</label>' .
       '<div class="controls">' .
         '<div class="' .$class. '">'.
@@ -82,7 +82,7 @@ class GroupTest extends FormerTests
   public function testCanOpenGroupManually()
   {
     $group = $this->former->group('foo')->__toString();
-    $matcher = '<div class="control-group"><label for="Foo" class="control-label">Foo</label>';
+    $matcher = '<div class="form-group"><label for="Foo" class="control-label">Foo</label>';
 
     $this->assertEquals($matcher, $group);
   }
@@ -235,7 +235,7 @@ class GroupTest extends FormerTests
       ->append('@', '$', $this->createButton('foo'))
       ->__toString();
     $matcher =
-    '<div class="control-group error">'.
+    '<div class="form-group error">'.
       '<label for="foo" class="control-label">Foo</label>'.
       '<div class="controls">'.
         '<div class="input-prepend input-append">'.
@@ -267,7 +267,7 @@ class GroupTest extends FormerTests
   public function testCanCreateRawGroups()
   {
     $group = $this->former->group()->contents('This be <b>HTML</b> content');
-    $matcher = '<div class="control-group"><div class="controls">This be <b>HTML</b> content</div></div>';
+    $matcher = '<div class="form-group"><div class="controls">This be <b>HTML</b> content</div></div>';
 
     $this->assertEquals($matcher, $group);
   }
@@ -275,7 +275,7 @@ class GroupTest extends FormerTests
   public function testCanCreateRawLabelessGroups()
   {
     $group = $this->former->group('MyField')->contents('This be <b>HTML</b> content');
-    $matcher = '<div class="control-group">'.
+    $matcher = '<div class="form-group">'.
       '<label for="MyField" class="control-label">MyField</label>'.
       '<div class="controls">This be <b>HTML</b> content</div>'.
     '</div>';

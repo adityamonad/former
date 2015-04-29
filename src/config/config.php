@@ -10,7 +10,7 @@
   'fetch_errors'      => true,
 
   // The framework to be used by Former
-  'framework'         => 'TwitterBootstrap',
+  'framework'         => 'TwitterBootstrap3',
 
   // Whether Former should try to apply Validator rules as attributes
   'live_validation'   => true,

@@ -11,7 +11,7 @@ class InputTest extends FormerTests
 
   public function provideSizes()
   {
-    $_sizes = array('mini', 'small', 'medium', 'large', 'xlarge', 'xxlarge', 'span1', 'span6', 'span12', 'foo');
+    $_sizes = array('mini', 'small', 'medium', 'large', 'xlarge', 'xxlarge', 'col-sm-1', 'col-sm-6', 'col-sm-12', 'foo');
     foreach($_sizes as $s) $sizes[] = array($s);
 
     return $sizes;
@@ -208,7 +208,7 @@ class InputTest extends FormerTests
   {
     $former = $this->former->span1_text('name')->foo('bar');
 
-    $this->assertEquals('span1', $former->class);
+    $this->assertEquals('col-sm-1', $former->class);
     $this->assertEquals('bar', $former->foo);
   }
 
@@ -247,7 +247,7 @@ class InputTest extends FormerTests
     $this->former->withErrors($validator);
     $required = $this->former->text('required')->__toString();
     $matcher =
-    '<div class="control-group error">'.
+    '<div class="form-group error">'.
       '<label for="required" class="control-label">Required</label>'.
       '<div class="controls">'.
         '<input id="required" type="text" name="required">'.
@@ -266,7 +266,7 @@ class InputTest extends FormerTests
     $this->former->withErrors($validator);
     $required = $this->former->text('required')->__toString();
     $matcher =
-    '<div class="control-group error">'.
+    '<div class="form-group error">'.
       '<label for="required" class="control-label">Required</label>'.
       '<div class="controls">'.
         '<input id="required" type="text" name="required">'.
@@ -350,7 +350,7 @@ class InputTest extends FormerTests
   {
     $datalist = $this->former->text('foo')->useDatalist(array('foo' => 'bar', 'kel' => 'tar'))->__toString();
     $matcher =
-    '<div class="control-group">'.
+    '<div class="form-group">'.
       '<label for="foo" class="control-label">Foo</label>'.
       '<div class="controls">'.
         '<input list="datalist_foo" id="foo" type="text" name="foo">'.
@@ -368,7 +368,7 @@ class InputTest extends FormerTests
   {
     $datalist = $this->former->text('foo')->list('bar')->useDatalist(array('foo' => 'bar', 'kel' => 'tar'))->__toString();
     $matcher =
-    '<div class="control-group">'.
+    '<div class="form-group">'.
       '<label for="foo" class="control-label">Foo</label>'.
       '<div class="controls">'.
         '<input list="bar" id="foo" type="text" name="foo">'.
@@ -387,7 +387,7 @@ class InputTest extends FormerTests
     $field = $this->former->text('foo');
     $field->id('bar');
 
-    $matcher = '<div class="control-group"><label for="bar" class="control-label">Foo</label><div class="controls"><input id="bar" type="text" name="foo"></div></div>';
+    $matcher = '<div class="form-group"><label for="bar" class="control-label">Foo</label><div class="controls"><input id="bar" type="text" name="foo"></div></div>';
 
     $this->assertEquals($matcher, $field->__toString());
   }
