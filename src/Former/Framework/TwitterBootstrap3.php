@@ -111,8 +111,6 @@ class TwitterBootstrap3 extends Framework implements FrameworkInterface
     // Filter classes
     $classes = array_intersect($classes, $this->fields);
 
-    array_unshift($classes, 'form-control');
-
     return $classes;
   }
 
@@ -138,6 +136,11 @@ class TwitterBootstrap3 extends Framework implements FrameworkInterface
     // Filter classes according to field type
     if ($field->isButton()) $classes = $this->filterButtonClasses($classes);
     else $classes = $this->filterFieldClasses($classes);
+
+    if(!$field->isCheckable() && !$field->isButton() && !in_array($field->getType(), ['checkbox', 'radio']))
+    {
+      array_unshift($classes, 'form-control');
+    }
 
     // If we found any class, add them
     if ($classes) {
@@ -165,7 +168,16 @@ class TwitterBootstrap3 extends Framework implements FrameworkInterface
    */
   public function getLabelClasses()
   {
-    return 'control-label col-sm-4';
+    $type = $this->app['former']->form()->getType();
+
+    if($type == 'horizontal')
+    {
+      return 'control-label col-sm-4';
+    }
+    else
+    {
+      return 'control-label';
+    }
   }
 
   /**
@@ -199,7 +211,18 @@ class TwitterBootstrap3 extends Framework implements FrameworkInterface
    */
   public function getActionClasses()
   {
-    return 'col-sm-8 col-sm-offset-4';
+    $type = $this->app['former']->form()->getType();
+
+    if($type == 'horizontal')
+    {
+      return 'col-sm-8 col-sm-offset-4';
+    }
+    else
+    {
+      return '';
+    }
+
+
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -216,7 +239,7 @@ class TwitterBootstrap3 extends Framework implements FrameworkInterface
    */
   public function createHelp($text, $attributes = array())
   {
-    return Element::create('span', $text, $attributes)->addClass('help-inline');
+    return Element::create('span', $text, $attributes)->addClass('help-block');
   }
 
   /**
@@ -284,7 +307,16 @@ class TwitterBootstrap3 extends Framework implements FrameworkInterface
    */
   public function wrapField($field)
   {
-    return Element::create('div', $field)->addClass('col-sm-8');
+    $elem = Element::create('div', $field);
+
+    $formType = $this->app['former']->form()->getType();
+
+    if($formType === 'horizontal')
+    {
+      $elem->addClass('col-sm-8');
+    }
+
+    return $elem;
   }
 
 }
