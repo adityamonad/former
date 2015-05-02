@@ -66,6 +66,16 @@ class TwitterBootstrap3 extends Framework implements FrameworkInterface
     // Filter classes
     // $classes = array_intersect($classes, $this->buttons);
 
+    $convertClasses = array(
+      'large' => 'lg',
+      'small' => 'sm',
+      'mini' => 'xs',
+    );
+
+    $classes = Arrays::each($classes, function($class) use ($convertClasses) {
+      return isset($convertClasses[$class]) ? $convertClasses[$class] : $class;
+    });
+
     // Prepend button type
     $classes = $this->prependWith($classes, 'btn-');
     $classes[] = 'btn';
