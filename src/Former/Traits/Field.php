@@ -145,7 +145,13 @@ abstract class Field extends FormerObject implements FieldInterface
    */
   public function __toString()
   {
-    return $this->wrapAndRender();
+    try {
+      return $this->wrapAndRender();
+    }
+    catch(\Exception $ex) {
+      dd($ex);
+    }
+
   }
 
   ////////////////////////////////////////////////////////////////////

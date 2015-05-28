@@ -78,10 +78,16 @@ abstract class Checkable extends Field
    */
   public function __construct(Former $former, $type, $name, $label, $value, $attributes)
   {
+    // Unify auto and chained methods of grouping checkboxes
+    if (ends_with($name, '[]')) {
+      $name = substr($name, 0, -2);
+      $this->grouped();
+    }
+
     parent::__construct($former, $type, $name, $label, $value, $attributes);
 
     if (is_array($this->value)) {
-      $this->items($this->value);
+      //$this->items($this->value);
     }
   }
 
@@ -233,9 +239,11 @@ abstract class Checkable extends Field
   protected function items($_items)
   {
     // If passing an array
-    if(sizeof($_items) == 1 and
-       is_array($_items[0])) {
-         $_items = $_items[0];
+    if (sizeof($_items) == 1 and
+      isset($_items[0]) and
+      is_array($_items[0])
+    ) {
+      $_items = $_items[0];
     }
 
     // Fetch models if that's what we were passed
@@ -276,6 +284,7 @@ abstract class Checkable extends Field
       $item = array(
         'name' => $name,
         'label' => Helpers::translate($label),
+        'count' => $count,
       );
       if(isset($attributes)) $item['attributes'] = $attributes;
 
@@ -310,7 +319,7 @@ abstract class Checkable extends Field
 
     // Create field
     $field = Input::create($this->checkable, $name, $value, $attributes);
-    if ($this->isChecked($name, $value)) $field->checked('checked');
+    if ($this->isChecked($item, $value)) $field->checked('checked');
 
     // Add hidden checkbox if requested
     if ($this->isOfType('checkbox', 'checkboxes')) {
@@ -372,23 +381,68 @@ abstract class Checkable extends Field
    *
    * @return boolean Checked or not
    */
-  protected function isChecked($name = null, $value = null)
+  protected function isChecked($item = null, $value = null)
   {
-    if(!$name) $name = $this->name;
+    if(isset($item['name'])) {
+      $name = $item['name'];
+    }
+    if(empty($name)) {
+      $name = $this->name;
+    }
 
     // If it's a checkbox, see if we marqued that one as checked in the array
     // Or if it's a single radio, simply see if we called check
     if($this->isCheckbox() or
-      !$this->isCheckbox() and !$this->items)
-        $checked = Arrays::get($this->checked, $name, false);
+      !$this->isCheckbox() and !$this->items
+    ) {
+      $checked = Arrays::get($this->checked, $name, false);
+    }
 
     // If there are multiple, search for the value
     // as the name are the same between radios
-    else $checked = Arrays::get($this->checked, $value, false);
+    else {
+      $checked = Arrays::get($this->checked, $value, false);
+    }
 
-    // Check the values and POST array
-    $post   = $this->former->getPost($name);
-    $static = $this->former->getValue($name);
+    if ($this->isGrouped()) {
+      // The group index. (e.g. 'bar' if the item name is foo[bar], or the item index for foo[])
+      $groupIndex = self::getGroupIndexFromItem($item);
+
+      // Search using the bare name, not the individual item name
+      $post   = $this->former->getPost($this->name);
+      $static = $this->former->getValue($this->name);
+
+      if (isset($post[$groupIndex])) {
+        $post = $post[$groupIndex];
+      }
+
+      /**
+       * Support for Laravel Collection repopulating for grouped checkboxes. Note that the groupIndex must
+       * match the value in order for the checkbox to be considered checked, e.g.:
+       *
+       *  array(
+       *    'name' = 'roles[foo]',
+       *    'value' => 'foo',
+       *  )
+       */
+      if ($static instanceof Collection) {
+        // If the repopulate value is a collection, search for an item matching the $groupIndex
+        foreach ($static as $staticItem) {
+          $staticItemValue = method_exists($staticItem, 'getKey') ? $staticItem->getKey() : $staticItem;
+          if ($staticItemValue == $groupIndex) {
+            $static = $staticItemValue;
+            break;
+          }
+        }
+      } else if (isset($static[$groupIndex])) {
+        $static = $static[$groupIndex];
+      }
+    } else {
+
+      // Check the values and POST array
+      $post   = $this->former->getPost($name);
+      $static = $this->former->getValue($name);
+    }
 
     if(!is_null($post) and $post !== $this->former->getOption('unchecked_value')) $isChecked = ($post == $value);
     elseif(!is_null($static)) $isChecked = ($static == $value);
@@ -416,6 +470,21 @@ abstract class Checkable extends Field
     return
       $this->grouped == true or
       strpos($this->name, '[]') !== FALSE;
+  }
+
+  /**
+   * @param array $item The item array, containing at least name and count keys.
+   *
+   * @return mixed The group index. (e.g. returns bar if the item name is foo[bar], or the item count for foo[])
+   */
+  public static function getGroupIndexFromItem($item)
+  {
+    $groupIndex = preg_replace('/^.*?\[(.*)\]$/', '$1', $item['name']);
+    if (empty($groupIndex) or $groupIndex == $item['name']) {
+      return $item['count'];
+    }
+
+    return $groupIndex;
   }
 
 }
