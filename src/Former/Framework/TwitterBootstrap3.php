@@ -55,6 +55,12 @@ class TwitterBootstrap3 extends Framework implements FrameworkInterface
   /////////////////////////// FILTER ARRAYS //////////////////////////
   ////////////////////////////////////////////////////////////////////
 
+  public function filterState($state)
+  {
+    // Filter out wrong states
+    return in_array($state, $this->states) ? 'has-'.$state : null;
+  }
+
   /**
    * Filter buttons classes
    *
@@ -239,7 +245,7 @@ class TwitterBootstrap3 extends Framework implements FrameworkInterface
    */
   public function createHelp($text, $attributes = array())
   {
-    return Element::create('span', $text, $attributes)->addClass('help-block');
+    return Element::create('span', (string) __($text), $attributes)->addClass('help-block');
   }
 
   /**
@@ -252,7 +258,7 @@ class TwitterBootstrap3 extends Framework implements FrameworkInterface
    */
   public function createBlockHelp($text, $attributes = array())
   {
-    return Element::create('p', $text, $attributes)->addClass('help-block');
+    return Element::create('p', (string) __($text), $attributes)->addClass('help-block');
   }
 
   /**
