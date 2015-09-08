@@ -434,6 +434,14 @@ abstract class Checkable extends Field
             break;
           }
         }
+      } else if($static instanceof \Core\Collection) {
+        foreach ($static as $staticItem) {
+          $staticItemValue = method_exists($staticItem, 'getId') ? $staticItem->getId() : $staticItem;
+          if ($staticItemValue == $groupIndex) {
+            $static = $staticItemValue;
+            break;
+          }
+        }
       } else if (isset($static[$groupIndex])) {
         $static = $static[$groupIndex];
       }
