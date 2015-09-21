@@ -178,7 +178,7 @@ class TwitterBootstrap3 extends Framework implements FrameworkInterface
 
     if($type == 'horizontal')
     {
-      return 'control-label col-sm-4';
+      return 'control-label col-sm-3';
     }
     else
     {
@@ -221,7 +221,7 @@ class TwitterBootstrap3 extends Framework implements FrameworkInterface
 
     if($type == 'horizontal')
     {
-      return 'col-sm-8 col-sm-offset-4';
+      return 'col-sm-9 col-sm-offset-3';
     }
     else
     {
