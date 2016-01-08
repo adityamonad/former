@@ -90,6 +90,11 @@ class Populator
 
     }
 
+    if(is_object($value) && isset($value->id))
+    {
+        $value = $value->id;
+    }
+
     return $value;
   }
 
